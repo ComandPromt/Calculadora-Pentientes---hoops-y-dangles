@@ -1,13 +1,5 @@
 <?php
 
-function ver_tipo($tipo){
-	
-	$user_fun = new Userfunction();
-		
-	return $user_fun->idioma($tipo,'spanish');
-	
-}
-
 function limpiar(){
 	
 	print '<hr class="mt-2 mb-3"/>';

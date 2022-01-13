@@ -1,12 +1,6 @@
 <?php
 
-session_start();
-
-include('config.php');
-
 include('funciones.php');
-
-$user_fun = new Userfunction();
 
 ?>
 

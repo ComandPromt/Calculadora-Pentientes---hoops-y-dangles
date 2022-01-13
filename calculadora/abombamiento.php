@@ -4,8 +4,6 @@ $calculo=0;
 
 $abombamiento=0;
 
-include('../config.php');
-
 include('../funciones.php');
 
 if(isset($_POST['medida1'])&& isset($_POST['medida2']) && isset($_POST['grosorBola'])&& isset($_POST['diametro'])&& isset($_POST['enganche'])){
