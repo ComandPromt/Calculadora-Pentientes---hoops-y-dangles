@@ -1,0 +1,92 @@
+
+.espacio_arriba{
+	
+	padding-top:20px;
+	
+}
+
+.numero{
+	
+	width:100px;
+	
+}
+
+.imagen{
+	
+	width:140px;
+	
+	height:150px;
+	
+}
+
+.espacio{
+	
+	padding-left:15px;
+	
+}
+
+.mitad{
+	
+	margin-left:40%;
+	
+}
+
+.centrar{
+	
+	text-align:center;
+	
+}
+
+label{
+	
+	font-size:20px !important;
+	
+	font-style: italic !important;
+
+}
+
+.separador{
+	
+	margin-left:10px;
+	
+}
+
+.letra{
+	
+	font-size:17px !important;
+
+}
+
+.flotar_izquierda{
+	
+	float:left;
+		
+}
+
+.espacio_izquierda{
+	
+	padding-left:150px;
+		
+}
+
+.flotar_derecha{
+	
+	float:right;
+		
+}
+
+.limpiar{
+	
+	clear:both;
+	
+	padding-top:20px;
+	
+}
+
+.icono{
+	
+	width:30px;
+	
+	height:80px;
+	
+}

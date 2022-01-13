@@ -1,0 +1,17 @@
+input{
+	
+    height: 30px;
+	
+}
+
+input[type=number]{
+	
+    font-size: 20px;
+	
+}
+
+.feetInchResult{
+	
+    font-size: 2rem;
+	
+}
