@@ -1,7 +1,5 @@
 <?php
 
-
-
 include('../funciones.php');
 
 function validar($texto,$float){
@@ -33,8 +31,6 @@ function validar($texto,$float){
 	$calculo=0;
 	
 	$espacio=0;
-	
-	// Calculo numero de bolas que caben en un aro
 
 	if(isset($_POST['espacio_bolas']) && isset($_POST['diametro']) && isset($_POST['anchoBola']) && validar($_POST['diametro'],true) && validar($_POST['anchoBola'],true) ){
 
@@ -48,15 +44,7 @@ function validar($texto,$float){
 	
 		$resultado='<p>Necesitas '.$calculo.' bolas';
 	
-		if((int)$_POST['numero_aros']>1){
-			
-			$resultado.=" por aro.</p>";
-			
-			$calculo*=(int)$_POST['numero_aros'];
-			
-			$resultado.='<p>Para '.(int)$_POST['numero_aros'].' aros necesitas '.$calculo.' bolas</p>';
-			
-		}
+		$resultado.=calcularNumeroAros((int)$_POST['numero_aros'],$calculo);
 	
 		print $resultado;
 		

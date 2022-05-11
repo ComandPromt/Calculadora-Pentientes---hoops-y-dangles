@@ -1,48 +1,10 @@
 <?php
 
-
-
 include('../funciones.php');
-
-function convertirATexto($medida){
-	
-	$numero=substr($medida,0,strpos($medida,"."));
-	
-	$metro="metros";
-	
-	if((int)$numero==1){
-		
-		$metro="metro";
-		
-	}
-	
-	return $numero.' '.$metro.' y '.substr($medida,strpos($medida,".")+1,strlen($medida)).' cm';
-	
-}
-
-function truncate_float($number, $decimals) {
-	
-    $power = pow(10, $decimals); 
-	
-    if($number > 0){
-		
-        $resultado=floor($number * $power) / $power; 
-		
-    }
-	
-	else {
-		
-        $resultado=ceil($number * $power) / $power; 
-		
-    }
-	
-	return $resultado;
-	
-}
 
 $resultado="";
 
-if(isset($_POST['modo'])){
+if(isset($_POST['modo']) && isset($_POST['numero_aros']) && isset($_POST['medidaDiametro']) && isset($_POST['enganche'])){
 
 	if ((int)$_POST['modo']==1) {
 
@@ -112,12 +74,14 @@ if(isset($_POST['modo'])){
 	
 	else{
 		
-		print 'Necesitas '.$resultado;
+		$resultado='Necesitas '.$resultado;
 		
+		$resultado.=calcularNumeroArosCm((int)$_POST['numero_aros'],$calculo);
+			
 	}
-	
-	
-	
+
 }
 
+print $resultado;
+		
 ?>

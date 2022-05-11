@@ -55,10 +55,12 @@ function resultado(){
 	var anchoBola=document.getElementById('in_grosor').value;
 	
 	var numero_aros=document.getElementById('num_aros').value;
-	
-	var numero_aros=document.getElementById('num_aros').value;
-	
+		
 	var espacio_bolas=document.getElementById('espacio_bolas').value;
+	
+	var m1=document.getElementById('medida_1').value;
+	
+	var m2=document.getElementById('medida_2').value;
 	
 	var enganche=0;
 		
@@ -76,31 +78,59 @@ function resultado(){
 						
 		break;
 		
-		case "abombamiento":
+		case "corona":
+
+			corona(diametro,m2,m1);
 		
-			abombamiento(document.getElementById('medida_1').value,document.getElementById('medida_2').value,diametro,enganche,anchoBola);
+		break;
+		
+		case "abombamiento":
+					
+			abombamiento(m1,m2,diametro,enganche,anchoBola,espacio_bolas,numero_aros);
 		
 		break;
 		
 		case "enganche_simple":
 					
-			longitud_cuerda(diametro,enganche,1);
+			longitud_cuerda(diametro,enganche,1,numero_aros);
 			
 		break;
 		
 		case "enganche_doble":
 		
-			longitud_cuerda(diametro,enganche,2);
+			longitud_cuerda(diametro,enganche,2,numero_aros);
 		
 		break;
 		
 	}
 		
 }
-	
-function abombamiento(medida_1,medida_2,diametro,enganche,anchoBola) {
 
-	var parametros = {"medida1":medida_1,"medida2":medida_2,"diametro":diametro,"enganche":enganche,"grosorBola":anchoBola};
+function corona(diametro,altura_bolas,altura_corona) {
+
+	var parametros = {"diametro":diametro,"altura_bolas":altura_bolas,"altura_corona":altura_corona};
+	
+	$.ajax({
+		
+		data:parametros,
+		
+		url:'calculadora/corona.php',
+		
+		type: 'post',
+
+		success: function (response) {
+	
+			document.getElementById("resultado").innerHTML=response;
+
+		}
+		
+	});
+	
+}
+
+function abombamiento(medida_1,medida_2,diametro,enganche,anchoBola,espacio_bolas,numero_aros) {
+
+	var parametros = {"medida1":medida_1,"medida2":medida_2,"diametro":diametro,"enganche":enganche,"grosorBola":anchoBola,"espacio_bolas":espacio_bolas,"numero_aros":numero_aros};
 	
 	$.ajax({
 		
@@ -120,9 +150,9 @@ function abombamiento(medida_1,medida_2,diametro,enganche,anchoBola) {
 	
 }
 
-function longitud_cuerda(diametro,enganche,modo) {
+function longitud_cuerda(diametro,enganche,modo,numero_aros) {
 	
-	var parametros = {"medidaDiametro":diametro,"enganche":enganche,"modo":modo};
+	var parametros = {"medidaDiametro":diametro,"enganche":enganche,"modo":modo,"numero_aros":numero_aros};
 	
 	$.ajax({
 		
@@ -147,6 +177,7 @@ function numeroBolas(diametro,anchoBola,numero_aros,enganche,espacio_bolas) {
 	var parametros = {"diametro":diametro,"anchoBola":anchoBola,"numero_aros":numero_aros,"enganche":enganche,"espacio_bolas":espacio_bolas};
 	
 	$.ajax({
+		
 		data:parametros,
 		url:'calculadora/nbolas.php',
 		type: 'post',
@@ -158,6 +189,74 @@ function numeroBolas(diametro,anchoBola,numero_aros,enganche,espacio_bolas) {
 		}
 		
 	});
+	
+}
+
+function verEspacioBolas(check){
+	
+	if(check){
+				
+		document.getElementById('espacio_bolas').hidden = false;
+		
+		document.getElementById('label_espacio_bolas').hidden = false;
+	}
+	
+	else{
+		
+		document.getElementById('espacio_bolas').hidden = true;
+		
+		document.getElementById('label_espacio_bolas').hidden = true;
+	}
+	
+}
+
+function verGrosor(check){
+	
+	if(check){
+		
+		document.getElementById('label_grosor').hidden = false;
+		
+		document.getElementById('in_grosor').hidden = false;
+		
+	}
+	
+	else{
+	
+		document.getElementById('label_grosor').hidden = true;
+		
+		document.getElementById('in_grosor').hidden = true;
+		
+	}
+	
+}
+
+function verMedidas(check){
+	
+	if(check){
+		
+		document.getElementById('medida_1').hidden = false;
+	
+		document.getElementById('medida_2').hidden = false;
+	
+		document.getElementById('labelm1').hidden = false;
+	
+		document.getElementById('labelm2').hidden = false;
+	
+		
+	}
+	
+	else{
+	
+		document.getElementById('medida_1').hidden = true;
+	
+		document.getElementById('medida_2').hidden = true;
+	
+		document.getElementById('labelm1').hidden = true;
+	
+		document.getElementById('labelm2').hidden = true;
+	
+		
+	}
 	
 }
 
@@ -178,29 +277,56 @@ function ver_tipo(){
 		document.getElementById('diametro').innerHTML="";
 		
 	}
-	
-	if(parseFloat(valorGrosorBola)>0){
-
-		document.getElementById('grosor-bola').innerHTML=valorGrosorBola+' cm';
-	
-	}
-	
-	else{
 		
-		document.getElementById('grosor-bola').innerHTML="";
-		
-	}
-	
 	var tipo=document.getElementById('tipo').value;
 	
 	var imagen='';
 
 	var texto='';
 
+	verMedidas(false);
+	
+	verEspacioBolas(false);
+	
+	verGrosor(false);	
+	
+	switch(tipo){
+		
+		
+		case "n_bolas":
+		
+			verGrosor(true);
+			
+			verGrosor(true);
+			
+			verEspacioBolas(true);
+		
+		break;
+		
+		case "abombamiento":
+				
+			verMedidas(true);
+			
+			verEspacioBolas(true);
+			
+			verGrosor(true);
+					
+		break;
+
+		case "corona":
+		
+			verMedidas(true);
+						
+			verGrosor(false);
+			
+		break;
+				
+	}
+	
 	switch(tipo){
 		
 		case "enganche_simple":
-		
+					
 			imagen='simple.png';
 			
 			texto='Simple';
@@ -220,16 +346,22 @@ function ver_tipo(){
 			texto='N&uacute;mero de bolas';
 		
 			imagen='nbolas.png';
-			
-			
-			
+					
 		break;
 		
 		case "abombamiento":
-		
+					
 			texto='Abombamiento';
 		
 			imagen='abombamiento.png';
+		
+		break;
+		
+		case "corona":
+		
+			texto='Corona';
+		
+			imagen='corona.png';
 		
 		break;
 		
@@ -239,4 +371,6 @@ function ver_tipo(){
 		
 	document.getElementById("imagen_resultado").src = 'assets/img/'+imagen;	
 	
+	document.getElementById("resultado").innerHTML="";
+
 }

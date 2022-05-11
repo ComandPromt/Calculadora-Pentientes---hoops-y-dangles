@@ -14,6 +14,8 @@ include('funciones.php');
 
 		<meta charset="utf-8" />
 
+		<link rel="icon" type="image/x-icon" href="assets/img/icon.png">
+
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -63,7 +65,14 @@ input[type=number]{
     font-size: 2rem;
 	
 }
+option{
 
+	font-size:20px;
+
+ }
+ select{
+	 font-size:18px;
+ }
   </style>
   
 	</head>
@@ -156,12 +165,7 @@ input[type=number]{
 							</div>
 							
 						</div>
-						
-						<div class="modal-footer">
-
-									
-						</div>
-				
+										
 					</div>
 				
 				</div>
@@ -316,13 +320,13 @@ input[type=number]{
 				
 					<div class="modal-content">
 				
-						<div style="height:40px;" class="flotar_derecha modal-header">
+						<div class="flotar_derecha modal-header">
 
 							<button  class="btn btn-default" data-dismiss="modal">X</button>
 													
 						</div>
 						
-						<div class="modal-body">
+						<div>
 						
 							<?php
 							
@@ -333,43 +337,10 @@ input[type=number]{
 						</div>
 						
 						<div class="modal-footer">
-	
-							<div class="limpiar flotar_izquierda">
-	
-								<select id="tipo" onchange="ver_tipo()">
-								
-									<option value="enganche_simple">Simple
-								
-									</option>
-								
-									<option value="enganche_doble">Doble
-									
-									</option>
-									
-									<option value="n_bolas">Nº de bolas
-									
-									</option>
-									
-									<option value="abombamiento">Abombamiento
-									
-									</option>
-									
-								</select>
-																
-								
-
-								
-							</div>
-							
-							
-							
-							<div class="limpiar flotar_izquierda">
-							
-								<?php limpiar(); ?>
-							
-		<div style="padding-left:5px;" class="flotar_izquierda">
+			
+		<div style="padding-left:5px;" class="limpiar flotar_izquierda">
 		
-								<div class="limpiar flotar_izquierda">
+								<div class="flotar_izquierda">
 								
 												<div class="flotar_izquierda">
 								
@@ -406,30 +377,64 @@ input[type=number]{
 
 								</div>
 								
-								<div class="limpiar flotar_izquierda">
+								<div class="flotar_izquierda">
 								
 								<div class="flotar_izquierda" >
 			
-									<label>Grosor de la bola</label>
+									<label id="label_grosor">Grosor de la bola</label>
 								
-									<input id="in_grosor" class="numero centrar separador" name="anchoBola" type="number" step="0.01" min="0.00" value="0.00"></input>
+									<input id="in_grosor" style="width:80px;" class="numero centrar separador" name="anchoBola" type="number" step="0.01" min="0.00" value="0.00"></input>
 								
-									<input id="medida_1" class="numero centrar separador"  type="number" step="0.01" min="0.00" value="0.00"></input>
+									<label id="labelm1">M1</label>
+								
+									<input id="medida_1" style="width:80px;" class="numero centrar separador"  type="number" step="0.01" min="0.00" value="0.00"></input>
 									
-									<input id="medida_2" class="numero centrar separador"  type="number" step="0.01" min="0.00" value="0.00"></input>
+									<label id="labelm2">M2</label>
+									
+									<input id="medida_2" style="width:80px;" class="numero centrar separador"  type="number" step="0.01" min="0.00" value="0.00"></input>
 										
 								</div>
 								
-								<div class="flotar_izquierda">
+								<div class="limpiar">
 								
-									<?php limpiar(); ?>
-								
-									<label>Espacio bolas</label>
-								
-									<input id="espacio_bolas" class="centrar separador" type="number" step="0.01" min="0.00" value="0.00"></input>	
-								
-								</div>
-								
+									<div class=" flotar_izquierda" >
+									
+										<label id="label_espacio_bolas">Espacio entre bolas</label>
+									
+										<input id="espacio_bolas" style="width:80px;" class="centrar separador" type="number" step="0.01" min="0.00" value="0.00"></input>	
+	
+									</div>	
+	
+									<div style="padding-left:20px;" class="flotar_derecha" >
+	
+										<select id="tipo" onchange="ver_tipo()">
+				
+											<option value="enganche_simple">Simple
+										
+											</option>
+										
+											<option value="enganche_doble">Doble
+											
+											</option>
+											
+											<option value="n_bolas">Nº de bolas
+											
+											</option>
+											
+											<option value="abombamiento">Abombamiento
+											
+											</option>
+											
+											<option value="corona">Corona
+											
+											</option>
+										
+										</select>
+									
+									</div>
+
+								</div>	
+																							
 								</div>
 								
 								<div class="limpiar flotar_izquierda">
@@ -458,7 +463,7 @@ input[type=number]{
 							
 							</div>
 									
-						</div>
+				
 				
 					</div>
 				
@@ -472,6 +477,12 @@ input[type=number]{
 		
 			document.getElementById("imagen_resultado").src = 'assets/img/simple.png';
 	
+			verMedidas(false);
+			
+			verGrosor(false);
+			
+			verEspacioBolas(false);
+			
 		</script>
 		
 		<script src="assets/js/jquery.min.js"></script>
