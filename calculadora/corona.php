@@ -1,8 +1,12 @@
 <?php
 
+include('../funciones.php');
+
 $calculo=0;
 
-if(isset($_POST['diametro'])&& isset($_POST['altura_bolas'])&& isset($_POST['altura_corona']) && (int)$_POST['diametro']>0 && (int)$_POST['altura_bolas']>0 && (int)$_POST['altura_corona']>0){
+$resultado="";
+
+if(isset($_POST['numero_aros'])&& isset($_POST['diametro'])&& isset($_POST['altura_bolas'])&& isset($_POST['altura_corona']) && (int)$_POST['diametro']>0 && (float)$_POST['altura_bolas']>0 && (float)$_POST['altura_corona']>0){
 
 	$valor1=3.14*pow(($_POST['diametro']/2),2)*$_POST['altura_corona'];
 	
@@ -18,16 +22,14 @@ if(isset($_POST['diametro'])&& isset($_POST['altura_bolas'])&& isset($_POST['alt
 
 }
 
-if($calculo<=0){
+if($calculo>0){
+		
+	$resultado='Necesitas '.round($calculo). ' bolas';
 	
-	print "";
+	$resultado.=calcularNumeroAros((int)$_POST['numero_aros'],$calculo);
 	
 }
 
-else{
-	
-	print 'Necesitas '.round($calculo). ' bolas';
-	
-}
+print $resultado;
 
 ?>

@@ -5,6 +5,12 @@
 	
 }
 
+.espacio_abajo{
+	
+	padding-bottom:20px;
+	
+}
+
 .numero{
 	
 	width:100px;
@@ -13,9 +19,9 @@
 
 .imagen{
 	
-	width:230px;
+	width:150px;
 	
-	height:230px;
+	height:150px;
 	
 }
 
@@ -27,7 +33,7 @@
 
 .mitad{
 	
-	margin-left:40%;
+	margin-left:35%;
 	
 }
 
@@ -60,12 +66,6 @@ label{
 .flotar_izquierda{
 	
 	float:left;
-		
-}
-
-.espacio_izquierda{
-	
-	padding-left:150px;
 		
 }
 

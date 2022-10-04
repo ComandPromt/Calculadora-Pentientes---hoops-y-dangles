@@ -1,7 +1,5 @@
 <?php
 
-
-
 $resultado="";
 
 if(isset($_POST['tipo'])){
