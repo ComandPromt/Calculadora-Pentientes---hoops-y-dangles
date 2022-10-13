@@ -1,4 +1,118 @@
 
+function convertirATexto(medida){
+	
+	medida=""+medida;
+	
+	var cm="";
+
+	var numero=medida.substring(0, medida.indexOf("."));
+	
+	var metro="metros";
+	
+	if(numero==1){
+		
+		metro="metro";
+		
+	}
+
+	cm=medida.substring(medida.indexOf(".")+1,medida.length)
+
+	if(cm.length>2){
+		
+		cm=cm.substring(0,2);
+		
+	}
+	
+	return numero+' '+metro+' y '+cm;
+	
+}
+
+function textoACm(calculo){
+	
+	var resultado=calculo;
+	
+	if(parseFloat(calculo)>0){
+	
+		if(calculo>100){
+
+			calculo=calculo/100;
+		
+			resultado=convertirATexto(calculo);
+				
+		}
+		
+		if(calculo%100==0){
+		
+			texto+=(calculo/100);
+			
+			if(texto==1){
+				
+				texto+=" metro";
+				
+			}
+			
+			else{
+				
+				texto+=" metros";
+				
+			}
+		
+			resultado=texto;
+		
+		}
+			
+		
+	
+	}
+	
+	return resultado;
+
+}
+
+function conversion(calculo,tipo){
+	
+	var resultado=calculo;
+
+	switch(tipo){
+		
+		case "cm":
+	
+			resultado=textoACm(calculo);
+	
+		break;
+
+	}
+	
+	return resultado;
+	
+}
+
+function calcularNumeroAros(numeroAros, calculo,tipo){
+	
+	var resultado="";
+	
+    if (numeroAros > 1) {
+		
+		calculo = parseFloat(calculo);
+		
+        resultado = "<p> Necesitas "+conversion(calculo,tipo)+" "+tipo+" por aro</p>";
+
+        calculo *= parseFloat(numeroAros);
+
+        resultado += '<p>Para '+numeroAros+' aros necesitas '+conversion(calculo,tipo)+' '+tipo+'.</p>';
+
+    }
+	
+	else{
+	
+		resultado="<p> Necesitas "+conversion(calculo,tipo)+" "+tipo+"</p>";
+	
+	}
+
+    return resultado;
+
+}
+
 function cmToIn(){
 	
     result = this.value/2.54;
@@ -21,200 +135,464 @@ function dangles(){
 	
 	var modo=document.querySelector('input[name="modo_dangles"]:checked').value;
 	
-	var radio_dangles=parseInt(document.getElementById("diametro_dangles").value);
+	var radio_dangles=parseFloat(document.getElementById("diametro_dangles").value);
 	
+	var espacio=parseFloat(document.getElementById("espacio_dangles").value);
+	
+	var altura_triangulo=parseFloat(document.getElementById("altura_dangles").value);
+	
+	var base_triangulo=parseFloat(document.getElementById("base_triangulo").value);
+
 	radio_dangles/=2;
 	
-	var parametros = {"radio":radio_dangles,"espacio":parseInt(document.getElementById("espacio_dangles").value),"altura_triangulo":parseFloat(document.getElementById("altura_dangles").value),"base_triangulo":parseFloat(document.getElementById("base_triangulo").value),"modo":modo};
+	var vueltas=0;
+
+	var resultado="";
+
+	calculo=(2*3.14*radio_dangles)/4;
 	
-	$.ajax({
+	vueltas=calculo;
+	
+	vueltas=vueltas/espacio;
 		
-		data:parametros,
-		
-		url:'calculadora/calculo_dangles.php',
-		
-		type: 'post',
-
-		success: function (response) {
+	base_triangulo/=2;
+	
+	var resultado_circulo=90/vueltas;
+	
+	var contador_circulo=0;
+	
+	var angulo_circulo=0;
+	
+	var indices = [];
+	
+	var datos = [];
+	
+	var angulo;
+	
+	var a;
+	
+	var b;
+	
+	var indice;
+	
+	var valor;
+	
+	var y;
+	
+	for(var i=1;i<=vueltas;i++){
+					
+		if(i==1){
 			
-			document.getElementById("resultado_dangles").innerHTML=response;
-
+			angulo=Math.acos(espacio/radio_dangles);
+			
+			angulo_circulo=angulo;
+			
 		}
 		
-	});
+		else{
+			
+			angulo_circulo=contador_circulo;
+			
+		}
+		
+		if(angulo_circulo<=180){
+		
+			a=radio_dangles-(Math.sin(angulo_circulo)*radio_dangles);
+			
+			b=(altura_triangulo*((Math.cos(angulo_circulo)*altura_triangulo)))/base_triangulo;
+						
+			if(angulo_circulo>0 && contador_circulo==0){
+				
+				contador_circulo=angulo;
+							
+			}
+			
+			if(contador_circulo==0){
+				
+				contador_circulo=180;
+				
+			}
+			
+			indice='x2 '+redondear(contador_circulo)+' --> ';
+			
+			valor=Math.round(a+b,1);
+						
+			indices[i]=indice;
+			
+			datos[i]=valor;
+			
+			resultado+='<h4>'+indice+valor+'</h4>';
+			
+			if(contador_circulo==resultado_circulo){
+				
+				contador_circulo=0;
+				
+			}
+			
+			else{
+			
+				contador_circulo-=resultado_circulo;
+				
+			}
+									
+		}
+		
+	}
+	
+	if(modo==1){
+	
+		resultado='';
+
+		y=datos.length;
+		
+		y--;
+	
+		for(var i=0;i<indices.length;i++){
+		
+			resultado+='<h4>'+indices[i]+datos[y]+'</h4>';
+
+			y--;
+			
+		}
+		
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	if(calculo>0){
+		
+		resultado=calculo;
+		
+	}
+	
+	document.getElementById("resultado").innerHTML=resultado;
+	
 }
 
 function resultado(){
 	
-	var texto=ver_tipo();
-		
-	var tipo=document.getElementById('tipo').value;
-	
 	var diametro=document.getElementById('in_diametro').value;
 	
-	var anchoBola=document.getElementById('in_grosor').value;
-	
 	var numero_aros=document.getElementById('num_aros').value;
-		
-	var espacio_bolas=document.getElementById('espacio_bolas').value;
 	
-	var m1=document.getElementById('medida_1').value;
+	diametro=parseFloat(diametro);
 	
-	var m2=document.getElementById('medida_2').value;
+	numero_aros=parseInt(numero_aros);
 	
-	var enganche=0;
-		
-	if(document.getElementById('con_enganche').checked){
-		
-		enganche=1;
-		
-	}
+	if(parseFloat(diametro)>0 && parseInt(numero_aros)>0){
 	
-	document.getElementById("tipo_calculo").innerHTML=texto;
-
-	switch(tipo){
+		var texto=ver_tipo();
 		
-		case "n_bolas":
+		var tipo=document.getElementById('tipo').value;
 		
-			numeroBolas(diametro,anchoBola,numero_aros,enganche,espacio_bolas);
-						
-		break;
+		var anchoBola=document.getElementById('in_grosor').value;
+	
+		var espacio_bolas=document.getElementById('espacio_bolas').value;
 		
-		case "corona":
-
-			corona(diametro,m2,m1,numero_aros);
+		var m1=document.getElementById('medida_1').value;
 		
-		break;
-		
-		case "abombamiento":
-					
-			abombamiento(m1,m2,diametro,enganche,anchoBola,espacio_bolas,numero_aros);
-		
-		break;
-		
-		case "enganche_simple":
-					
-			longitud_cuerda(diametro,enganche,1,numero_aros);
+		var m2=document.getElementById('medida_2').value;
 			
-		break;
+		var enganche=0;
 		
-		case "enganche_doble":
+		anchoBola=parseFloat(anchoBola);
 		
-			longitud_cuerda(diametro,enganche,2,numero_aros);
+		espacio_bolas=parseFloat(espacio_bolas);
 		
-		break;
+		m1=parseFloat(m1);
 		
+		m2=parseFloat(m2);
+		
+		if(document.getElementById('con_enganche').checked){
+			
+			enganche=1;
+			
+		}
+		
+		document.getElementById("tipo_calculo").innerHTML=texto;
+
+		switch(tipo){
+			
+			case "n_bolas":
+			
+				if(parseFloat(anchoBola)>0){
+				
+					numeroBolas(diametro,anchoBola,numero_aros,enganche,espacio_bolas);
+			
+				}
+			
+			break;
+			
+			case "corona":
+								
+				corona(diametro,m2,m1,numero_aros);
+			
+			break;
+			
+			case "abombamiento":
+			
+				if(parseFloat(anchoBola)>0){
+					
+					abombamiento(m1,m2,diametro,enganche,anchoBola,espacio_bolas,numero_aros);
+				
+				}
+				
+			break;
+			
+			case "enganche_simple":
+						
+				longitud_cuerda(diametro,enganche,1,numero_aros);
+				
+			break;
+			
+			case "enganche_doble":
+			
+				longitud_cuerda(diametro,enganche,2,numero_aros);
+			
+			break;
+			
+			case "circle_form":
+			
+				chapa(diametro,espacio_bolas,numero_aros);
+			
+			break;
+			
+			case "circle_form_2":
+			
+				mover(diametro,m1,m2,numero_aros);
+			
+			break;
+			
+		}
+	
 	}
 
 }
 
+function mover(diametro,m1,m2,numero_aros){
+	
+	var calculo=0;
+	
+	var resultado="";
+	
+	if(validar(diametro)){
+		
+		calculo=((9*diametro)*(m1*m2))/25.5;
+
+	}
+	
+	if(calculo>0){
+
+		calculo=redondear(calculo);
+		
+		resultado=calcularNumeroAros(numero_aros,calculo,"bolas");
+		
+	}
+	
+	document.getElementById("resultado").innerHTML=resultado;
+	
+}
+
+function chapa(diametro,espacio_bolas,numero_aros){
+	
+	var calculo=0;
+	
+	var resultado="";
+	
+	if(validar(diametro)){
+		
+		calculo=(2*3.14*(diametro/2))/(((espacio_bolas+0.5)/2)+0.2);
+
+	}
+	
+	if(calculo>0){
+		
+		calculo=redondear(calculo);
+		
+		resultado=calcularNumeroAros(numero_aros,calculo,"bolas");
+		
+	}
+	
+	document.getElementById("resultado").innerHTML=resultado;
+	
+}
+
 function corona(diametro,altura_bolas,altura_corona,numero_aros) {
 
-	var parametros = {"diametro":diametro,"altura_bolas":altura_bolas,"altura_corona":altura_corona,"numero_aros":numero_aros};
-		
-	$.ajax({
-		
-		data:parametros,
-		
-		url:'calculadora/corona.php',
-		
-		type: 'post',
-
-		success: function (response) {
+	var calculo=0;
 	
-			if(response==""){
-				
-				document.getElementById("tipo_calculo").innerHTML="";
-				
-			}
+	var resultado="";
+			
+	if(validar(diametro)){
+		
+		var valor1="";
+		
+		var valor2="";
+		
+		var calculo_1="";
+		
+		var calculo_2="";
+		
+		valor1=3.14*Math.pow((diametro/2),2)*altura_corona;
 	
-			document.getElementById("resultado").innerHTML=response;
-
+		valor2=3.14*Math.pow(((diametro/2)+altura_bolas),2)*altura_corona;
+	
+		calculo_1=valor2-valor1;
+		
+		calculo_2=Math.pow(altura_bolas,3);
+		
+		calculo=calculo_1/calculo_2;
+		
+		calculo-=7;
+		
+		calculo=redondear(calculo);
+		
+		if(calculo>0){
+			
+			resultado=calcularNumeroAros(numero_aros,calculo,"bolas");
+		
 		}
-		
-	});
+			
+	}
+	
+	document.getElementById("resultado").innerHTML=resultado;	
 	
 }
 
 function abombamiento(medida_1,medida_2,diametro,enganche,anchoBola,espacio_bolas,numero_aros) {
 
-	var parametros = {"medida1":medida_1,"medida2":medida_2,"diametro":diametro,"enganche":enganche,"grosorBola":anchoBola,"espacio_bolas":espacio_bolas,"numero_aros":numero_aros};
+	if(validar(diametro)){
 		
-	$.ajax({
-		
-		data:parametros,
-		
-		url:'calculadora/abombamiento.php',
-		
-		type: 'post',
-
-		success: function (response) {
+		var calculo=0;
 	
-			if(response==""){
+		var abombamiento=0;
+	
+		var resultado="";
 				
-				document.getElementById("tipo_calculo").innerHTML="";
+		abombamiento=(medida_1+medida_2)/2.0;
+
+		if(enganche==1){
+			
+			enganche=2;
+			
+		}
+
+		calculo=dosDecimales((3.14*diametro)+abombamiento-enganche+espacio_bolas)/dosDecimales(anchoBola+espacio_bolas);
+		
+		if(calculo>0){
+		
+			calculo=redondear(calculo);
+
+			if(enganche>0){
+				
+				calculo-=3;
 				
 			}
-	
-			document.getElementById("resultado").innerHTML=response;
-
+			
+			else{
+				
+				calculo-=6;
+				
+			}
+			
+			resultado=calcularNumeroAros(numero_aros,calculo,"bolas");
+		
 		}
+			
+		document.getElementById("resultado").innerHTML=resultado;	
 		
-	});
+	}
+	
+}
+
+function validar(diametro){
+	
+	var resultado=false;
+	
+	if(diametro>0){
 		
+		resultado=true;
+		
+	}
+		
+	return resultado;
+	
 }
 
 function longitud_cuerda(diametro,enganche,modo,numero_aros) {
-	
-	var parametros = {"medidaDiametro":diametro,"enganche":enganche,"modo":modo,"numero_aros":numero_aros};
-		
-	$.ajax({
-		
-		data:parametros,
-		
-		url:'calculadora/longitud_cuerda.php',
-		
-		type: 'post',
 
-		success: function (response) {
+	if(validar(diametro)){
+		
+		var calculo=0;
 				
-			if(response==""){
+		if (modo==1) {
+	
+			calculo = (diametro * 10.7) / 4;
+			
+			if (enganche!=1) {
+	
+				calculo += 2;
 				
-				document.getElementById("tipo_calculo").innerHTML="";
+			}
+	
+		}
+		
+		else{
+	
+			calculo = (diametro * 142.5) / 8.7;
+			
+			if (enganche==1) {
+			
+				calculo -= 19;
+			
+			}
+			
+			else{
+				
+				calculo -= 17;
 				
 			}
 			
-			document.getElementById("resultado").innerHTML=response;
-
 		}
 		
-	});
-		
+		document.getElementById("resultado").innerHTML=calcularNumeroAros(numero_aros,calculo,"cm");
+			
+	}	
+	
+}
+
+function dosDecimales(n) {
+	
+  let t=n.toString();
+  
+  let regex=/(\d*.\d{0,2})/;
+  
+  return t.match(regex)[0];
+
+}
+
+function redondear(numero){
+	
+	return Math.round(numero,2);
+	
 }
 
 function numeroBolas(diametro,anchoBola,numero_aros,enganche,espacio_bolas) {
-	
-	var parametros = {"diametro":diametro,"anchoBola":anchoBola,"numero_aros":numero_aros,"enganche":enganche,"espacio_bolas":espacio_bolas};
-		
-	$.ajax({
-		
-		data:parametros,
-		url:'calculadora/nbolas.php',
-		type: 'post',
-
-		success: function (response) {  
-		
-			if(response==""){
-				
-				document.getElementById("tipo_calculo").innerHTML="";
-				
-			}
 			
-			document.getElementById("resultado").innerHTML=response;
-
-		}
-		
-	});
+	var espacio=0;
+	
+	if(enganche==1){
+					
+		espacio=2;
+	
+	}
+	
+	var calculo=(((diametro*3.14)-espacio)+espacio_bolas)/anchoBola+espacio_bolas;
+	
+	calculo=dosDecimales(calculo);
+	
+	calculo=redondear(calculo);
+	
+	document.getElementById("resultado").innerHTML=calcularNumeroAros(numero_aros,calculo,"bolas");
 		
 }
 
@@ -330,9 +708,15 @@ function ver_tipo(){
 			verGrosor(false);
 			
 		break;
-				
+		
+		case "circle_form_2":
+		
+			verMedidas(true);
+		
+		break;
+		
 	}
-	
+
 	switch(tipo){
 		
 		case "enganche_simple":
@@ -372,6 +756,22 @@ function ver_tipo(){
 			texto='Corona';
 		
 			imagen='corona.png';
+		
+		break;
+		
+		case "circle_form":
+		
+			texto='Chapas';
+		
+			imagen='chapas.png';
+		
+		break;
+		
+		case "circle_form_2":
+		
+			texto='Mover';
+		
+			imagen='mover.png';
 		
 		break;
 		
