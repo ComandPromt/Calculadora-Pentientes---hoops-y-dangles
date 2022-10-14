@@ -131,6 +131,28 @@ function inToCm(){
 	
 }
 
+function esCero(numero) {
+	
+	var cero=numero.toString();
+	
+	return cero[0];
+  
+}
+
+function degrees_to_radians(degrees) {
+	
+  return degrees * (Math.PI / 180);
+  
+}
+
+function radians_to_degrees(radians){
+	
+  var pi = Math.PI;
+  
+  return radians * (180/pi);
+  
+}
+
 function dangles(){
 	
 	var modo=document.querySelector('input[name="modo_dangles"]:checked').value;
@@ -149,15 +171,23 @@ function dangles(){
 
 	var resultado="";
 
+	if(espacio<1){
+		
+		espacio=1;
+		
+		document.getElementById("espacio_dangles").value=espacio;
+		
+	}
+
 	calculo=(2*3.14*radio_dangles)/4;
 	
 	vueltas=calculo;
+
+	vueltas/=espacio;
 	
-	vueltas=vueltas/espacio;
-		
 	base_triangulo/=2;
 	
-	var resultado_circulo=90/vueltas;
+	var resultado_circulo=dosDecimales(90/vueltas);
 	
 	var contador_circulo=0;
 	
@@ -177,13 +207,15 @@ function dangles(){
 	
 	var valor;
 	
-	var y;
-	
-	for(var i=1;i<=vueltas;i++){
+	vueltas=redondear(vueltas);
+		
+	for(var i=0;i<vueltas;i++){
 					
-		if(i==1){
+		if(i==0){
 			
-			angulo=Math.acos(espacio/radio_dangles);
+			angulo=radians_to_degrees(Math.acos(espacio/radio_dangles));
+			
+			angulo=dosDecimales(angulo);
 			
 			angulo_circulo=angulo;
 			
@@ -197,26 +229,26 @@ function dangles(){
 		
 		if(angulo_circulo<=180){
 		
-			a=radio_dangles-(Math.sin(angulo_circulo)*radio_dangles);
+			a=parseFloat(radio_dangles-(Math.sin(degrees_to_radians(angulo_circulo))*radio_dangles));
 			
-			b=(altura_triangulo*((Math.cos(angulo_circulo)*altura_triangulo)))/base_triangulo;
+			b=parseFloat((altura_triangulo*((Math.cos(degrees_to_radians(angulo_circulo))*altura_triangulo)))/base_triangulo);
 						
 			if(angulo_circulo>0 && contador_circulo==0){
 				
-				contador_circulo=angulo;
+				contador_circulo=dosDecimales(angulo);
 							
 			}
-			
-			if(contador_circulo==0){
+
+			if(esCero(contador_circulo)==0){
 				
 				contador_circulo=180;
 				
 			}
 			
-			indice='x2 '+redondear(contador_circulo)+' --> ';
+			indice='x2 '+dosDecimales(contador_circulo)+' --> ';
 			
-			valor=Math.round(a+b,1);
-						
+			valor=dosDecimales(a+b);
+			
 			indices[i]=indice;
 			
 			datos[i]=valor;
@@ -238,33 +270,26 @@ function dangles(){
 		}
 		
 	}
-	
+
 	if(modo==1){
 	
 		resultado='';
-
-		y=datos.length;
+		
+		var y=datos.length;
 		
 		y--;
-	
+		
 		for(var i=0;i<indices.length;i++){
 		
 			resultado+='<h4>'+indices[i]+datos[y]+'</h4>';
-
-			y--;
 			
+			y--;
+						
 		}
 		
 	}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	if(calculo>0){
-		
-		resultado=calculo;
-		
-	}
-	
-	document.getElementById("resultado").innerHTML=resultado;
+	document.getElementById("resultado_dangles").innerHTML=resultado;
 	
 }
 
